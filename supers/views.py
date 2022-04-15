@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import request
 from .models import Super
 from .serializers import SuperSerializer
 from rest_framework import status
@@ -8,7 +9,14 @@ from django.http import Http404
 class SupersList(APIView):
 
     def get(self, request):
+        type_param = request.query_params.get('type')
         supers = Super.objects.all()
+
+        if type_param:
+            supers = supers.filter(super_type__type=type_param)
+        else:
+            supers = supers.order_by('super_type')
+
         serializer = SuperSerializer(supers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
