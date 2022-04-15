@@ -8,8 +8,8 @@ from django.http import Http404
 class SupersList(APIView):
 
     def get(self, request):
-        supers = self.object.all()
-        serializer = SuperSerializer(supers, data=request.data)
+        supers = Super.objects.all()
+        serializer = SuperSerializer(supers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -20,17 +20,17 @@ class SupersList(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class SuperDetail(APIView):
+class SupersDetail(APIView):
 
     def get_object(self, pk):
         try:
-            return Super.objects.get(pk)
+            return Super.objects.get(pk=pk)
         except Super.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
-        super = self.get_object(pk)
-        serializer = SuperSerializer(super, data=request.data)
+        super = self.get_object(pk=pk)
+        serializer = SuperSerializer(super)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):

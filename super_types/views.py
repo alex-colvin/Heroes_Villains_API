@@ -24,13 +24,13 @@ class SuperTypeDetail(APIView):
 
     def get_object(self, pk):
         try:
-            return SuperType.objects.get(pk)
+            return SuperType.objects.get(pk=pk)
         except SuperType.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
-        supertype = self.get_object(pk)
-        serializer = SuperTypeSerializer(supertype, data=request.data)
+        supertype = self.get_object(pk=pk)
+        serializer = SuperTypeSerializer(supertype)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -42,7 +42,7 @@ class SuperTypeDetail(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, pk):
+    def delete(self, request, pk):
         supertype = self.get_object(pk)
         supertype.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
