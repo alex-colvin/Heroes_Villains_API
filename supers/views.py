@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import request
 from .models import Super
 from .serializers import SuperSerializer
+from super_types.models import SuperType
 from rest_framework import status
 from django.http import Http404
 
@@ -13,9 +14,22 @@ class SupersList(APIView):
         supers = Super.objects.all()
 
         if type_param:
+            
             supers = supers.filter(super_type__type=type_param)
+
         else:
-            supers = supers.order_by('super_type')
+            custom_response = {}
+            super_types = SuperType.objects.all()
+            for super_type in super_types:
+                
+                supers = Super.objects.filter(super_type=super_type.id)
+                
+                super_serializer = SuperSerializer(supers, many=True)
+
+                custom_response[super_type.type] = {
+                    "supers": super_serializer.data
+                }
+            return Response(custom_response)
 
         serializer = SuperSerializer(supers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
