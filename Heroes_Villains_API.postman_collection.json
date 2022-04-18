@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "52d10827-df17-4cf8-b361-36c0de2b79fd",
+		"_postman_id": "16c6a07a-caf8-4fd2-83d8-11f715761f07",
 		"name": "Heroes_Villains_API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -206,6 +206,14 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Add_Power_To_Super",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -247,6 +255,9 @@
 									"language": "json"
 								}
 							}
+						},
+						"url": {
+							"raw": ""
 						}
 					},
 					"response": []
@@ -255,7 +266,10 @@
 					"name": "Update_Super_Type",
 					"request": {
 						"method": "PUT",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				},
@@ -263,7 +277,10 @@
 					"name": "Delete_Super_Type",
 					"request": {
 						"method": "DELETE",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": ""
+						}
 					},
 					"response": []
 				}
