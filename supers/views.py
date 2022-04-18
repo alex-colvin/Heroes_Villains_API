@@ -7,28 +7,23 @@ from super_types.models import SuperType
 from rest_framework import status
 from django.http import Http404
 
+
 class SupersList(APIView):
 
     def get(self, request):
         type_param = request.query_params.get('type')
         supers = Super.objects.all()
-
-        if type_param:
-            
+        if type_param:            
             supers = supers.filter(super_type__type=type_param)
-
         else:
             custom_response = {}
             super_types = SuperType.objects.all()
-            for super_type in super_types:
-                
-                supers = Super.objects.filter(super_type=super_type.id)
-                
+            
+            for super_type in super_types:                
+                supers = Super.objects.filter(super_type=super_type.id)                
                 super_serializer = SuperSerializer(supers, many=True)
-
-                custom_response[super_type.type] = (super_serializer.data)
+                custom_response[super_type.type] = (super_serializer.data)                
             return Response(custom_response)
-
         serializer = SuperSerializer(supers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -39,6 +34,7 @@ class SupersList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SupersDetail(APIView):
 
@@ -62,6 +58,17 @@ class SupersDetail(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def patch (self, request, pk):
+        super = self.get_object(pk)
+        powers_param = request.query_params.get('powers')       
+        super.powers.add(powers_param)
+        serializer = SuperSerializer(super, data=request.data, partial=True)
+        if serializer.is_valid() == True:
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+                                
     def delete(self, request, pk):
         super = self.get_object(pk)
         super.delete()
