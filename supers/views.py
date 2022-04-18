@@ -26,9 +26,7 @@ class SupersList(APIView):
                 
                 super_serializer = SuperSerializer(supers, many=True)
 
-                custom_response[super_type.type] = {
-                    "supers": super_serializer.data
-                }
+                custom_response[super_type.type] = (super_serializer.data)
             return Response(custom_response)
 
         serializer = SuperSerializer(supers, many=True)
