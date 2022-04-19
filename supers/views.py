@@ -19,10 +19,14 @@ class SupersList(APIView):
             custom_response = {}
             super_types = SuperType.objects.all()
             
-            for super_type in super_types:                
+            for super_type in super_types: 
+                if super_type.type == 'Hero':
+                    supertype = 'heroes'
+                else:
+                    supertype = 'villains'                               
                 supers = Super.objects.filter(super_type=super_type.id)                
                 super_serializer = SuperSerializer(supers, many=True)
-                custom_response[super_type.type] = (super_serializer.data)                
+                custom_response[supertype] = (super_serializer.data)                
             return Response(custom_response)
         serializer = SuperSerializer(supers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
